@@ -227,7 +227,7 @@ def train_fully_connected_adam():
     tot_time = end_time - start_time
     
     # Print training, validation and test statistics
-    store_stats(history, func='SGD_Adam', 
+    store_stats(history, func='Adam', 
                 epoch=EPOCH, lr=LEARNING_RATE, 
                 test_loss=test_loss, test_acc=test_acc, 
                 training_time=tot_time)
@@ -236,7 +236,7 @@ def train_fully_connected_adam():
     print("Final Test Accuracy: {:.4%}".format(test_acc))
     print("Total Training Time: {:.2f} seconds".format(tot_time))
 
-    plot_history(history, test_loss, test_acc, 'SGD_Adam','SGD and Adam')
+    plot_history(history, test_loss, test_acc, 'Adam','Adam')
 
 #----- 1.4 Add Batch Normalization
 def train_fully_connected_bn_sgd():
@@ -470,8 +470,7 @@ def train_CNN_sgd():
     BACTH_SIZE = 128
     VAL_SPLIT = 0.1
 
-    optimizer = Adam(learning_rate=LEARNING_RATE, beta_1=0.99, beta_2=0.999)
-    model.compile(optimizer=optimizer,
+    model.compile(optimizer=SGD(learning_rate=LEARNING_RATE),
                   loss=SparseCategoricalCrossentropy(),
                   metrics=['accuracy'])
 
@@ -507,19 +506,19 @@ def train_CNN_sgd():
 
 if __name__ == "__main__":
     # PART 1 -------------------------
-    # train_fully_connected_sgd()
-    # train_fully_connected_momentum_sgd(func='SGD_Momentum', learning_rate=0.1, momentum=0.9, batch_size=128)
-    # train_fully_connected_adam()
-    # train_fully_connected_bn_sgd()
+    train_fully_connected_sgd()
+    train_fully_connected_momentum_sgd(func='SGD_Momentum', learning_rate=0.1, momentum=0.9, batch_size=128)
+    train_fully_connected_adam()
+    train_fully_connected_bn_sgd()
     # PART 2 -------------------------
-    # train_momentum_sgd_gs_lr()
+    train_momentum_sgd_gs_lr()
 
-    # learning_rates = [0.1, 0.03, 0.01, 0.003]
-    # momentums = [0.0, 0.5, 0.9]
-    # batch_sizes = [32, 64, 128]
-    # grid_search_sgd(learning_rates, momentums, batch_sizes)
+    learning_rates = [0.1, 0.03, 0.01, 0.003]
+    momentums = [0.0, 0.5, 0.9]
+    batch_sizes = [32, 64, 128]
+    grid_search_sgd(learning_rates, momentums, batch_sizes)
 
-    # random_search_sgd(n_rand_comb=10)
+    random_search_sgd(n_rand_comb=10)
 
     # PART 3 -------------------------
     train_CNN_sgd()
